@@ -31,7 +31,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tabs.Navigator style={styles.tab}>
-        <Tabs.Screen name="Today2" component={TodayScreen2} />
+        <Tabs.Screen name="Today" component={TodayScreen} />
         <Tabs.Screen name="Diary" component={DiaryScreen} />
         <Tabs.Screen name="My Shelf" component={ShelfScreen} />
         <Tabs.Screen name="Discover" component={DiscoverScreen} />
