@@ -1,3 +1,8 @@
+// The main screen of the application. It has a list of routines --it can be edited by the user
+// each routine is a RoutineButton component
+//when pressed, it leads to a list of steps that are also  editable
+//each step is a component
+
 import React, { useState, useLayoutEffect } from "react";
 import {
   View,
@@ -80,9 +85,11 @@ export default ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require("../assets/appname.png")} />
+
       <View style={styles.content}>
         <FlatList
           data={routineList}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item: { title }, index }) => {
             return (
               <RoutineButton

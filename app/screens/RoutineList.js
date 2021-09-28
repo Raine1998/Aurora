@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useLayoutEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -10,13 +10,45 @@ import {
 import Colors from "../config/Colors";
 import { Ionicons } from "@expo/vector-icons";
 
-export default () => {
+const renderAddListIcon = (addItem) => {
+  return (
+    <TouchableOpacity
+      onPress={() => addItem({ text: "hello2", isChecked: false })}
+    >
+      <Text style={styles.icon}>+</Text>
+    </TouchableOpacity>
+  );
+};
+
+export default ({ navigation }) => {
+  const [routineItems, setRoutineItems] = useState([
+    { text: "hello", isChecked: false },
+  ]);
+
+  const addItemToRoutineList = (item) => {
+    routineItems.push(item);
+    setRoutineItems([...routineItems]);
+  };
+
+  const removeItemFromRoutineList = (index) => {
+    routineItems.splice(index, 1);
+    setRoutineItems([...routineItems]);
+  };
+
+  //the + button on the header
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => renderAddListIcon(addItemToRoutineList),
+    });
+  });
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={[]}
-        renderItem={({ item, index }) => {
-          return <View> </View>;
+        data={routineItems}
+        keyExtractor={(item, index) => index.toString()} // key
+        renderItem={({ item: { text, isChecked }, index }) => {
+          return <Text>{text}</Text>;
         }}
       />
     </View>
