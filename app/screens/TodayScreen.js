@@ -14,7 +14,7 @@ import {
 import Colors from "../config/Colors";
 import Routine from "../../components/Routine";
 
-function TodayScreen(props) {
+function TodayScreen({ navigation }) {
   console.log("app executed");
 
   const [routine, setRoutine] = useState();
@@ -53,7 +53,9 @@ function TodayScreen(props) {
           {/* This is where the routines will go */}
 
           {/* default routines*/}
-          <TouchableOpacity onPress={() => editDefaultRoutine()}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("MorningRoutine")}
+          >
             <Routine text={"Morning Routine"}></Routine>
           </TouchableOpacity>
 

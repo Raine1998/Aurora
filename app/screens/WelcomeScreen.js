@@ -8,7 +8,7 @@ import {
   Button,
   Alert,
 } from "react-native";
-import Colors from "../config/colors";
+import Colors from "../config/Colors";
 
 function WelcomeScreen({ navigation }) {
   return (
@@ -40,7 +40,7 @@ function WelcomeScreen({ navigation }) {
         <View style={styles.guestButton}>
           <Button
             title="Continue without signing up"
-            onPress={() => navigation.navigate("Today")}
+            onPress={() => navigation.navigate("Today2")}
           />
         </View>
       </View>

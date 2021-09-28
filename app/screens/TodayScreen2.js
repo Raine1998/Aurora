@@ -1,109 +1,102 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import {
   View,
   StyleSheet,
   Text,
-  KeyboardAvoidingView,
-  Platform,
-  TextInput,
-  TouchableOpacity,
   Image,
-  Keyboard,
+  TouchableOpacity,
+  FlatList,
+  Alert,
 } from "react-native";
 
 import Colors from "../config/Colors";
-import Routine from "../../components/Routine";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { Ionicons } from "@expo/vector-icons";
 
-const Stack = createStackNavigator();
+const RoutineButton = ({ title, navigation, onDelete }) => {
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate("RoutineList", { title });
+      }}
+      style={styles.itemContainer}
+    >
+      <View>
+        <Text style={styles.itemTitle}>{title}</Text>
+      </View>
+      <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity onPress={() => {}}>
+          <Ionicons name="options-outline" size={27} color={Colors.primary} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            Alert.alert("Delete this routine?", "", [
+              { text: "Delete", onPress: onDelete },
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+            ])
+          }
+        >
+          <Ionicons name="trash-outline" size={27} color={Colors.primary} />
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
-function TodayScreen2(props) {
-  console.log("app executed");
+const renderAddListIcon = (addItem) => {
+  return (
+    <TouchableOpacity onPress={() => addItem({ title: "title" })}>
+      <Text style={styles.icon}>+</Text>
+    </TouchableOpacity>
+  );
+};
 
-  const [routine, setRoutine] = useState();
-  const [routineItems, setRoutineItems] = useState([]);
+export default ({ navigation }) => {
+  const [routineList, setRoutineList] = useState([
+    { title: "Morning" },
+    { title: "Night" },
+    { title: "Weekend" },
+  ]);
 
-  const handleAddRoutine = () => {
-    Keyboard.dismiss();
-    setRoutineItems([...routineItems, routine]);
-    setRoutine(null);
+  const addItemToRoutineList = (item) => {
+    routineList.push(item);
+    setRoutineList([...routineList]);
   };
 
-  // deletes a routine
-  const completeRoutine = (index) => {
-    let itemsCopy = [...routineItems];
-    itemsCopy.splice(index, 1);
-    setRoutineItems(itemsCopy);
+  const removeItemFromRoutineList = (index) => {
+    routineList.splice(index, 1);
+    setRoutineList([...routineList]);
   };
 
-  const editRoutine = (index) => {
-    console.log("edit routine");
-    let itemsCopy = [...routineItems];
-  };
-
-  const editDefaultRoutine = () => {
-    console.log("edit routine");
-  };
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => renderAddListIcon(addItemToRoutineList),
+    });
+  });
 
   return (
-    <NavigationContainer>
-      <View>
-        <Text>Hello</Text>
+    <View style={styles.container}>
+      <Image style={styles.logo} source={require("../assets/appname.png")} />
+      <View style={styles.content}>
+        <FlatList
+          data={routineList}
+          renderItem={({ item: { title }, index }) => {
+            return (
+              <RoutineButton
+                title={title}
+                navigation={navigation}
+                onDelete={() => removeItemFromRoutineList(index)}
+              />
+            );
+          }}
+        />
       </View>
-    </NavigationContainer>
-
-    // <View style={styles.container}>
-    //   <Image style={styles.logo} source={require("../assets/appname.png")} />
-    //   {/*Todo list  */}
-    //   <View style={styles.taskWrapper}>
-    //     <Text styles={styles.sectionTitle}>Today's routines</Text>
-
-    //     <View style={styles.items}>
-    //       {/* This is where the routines will go */}
-
-    //       {/* default routines*/}
-    //       <TouchableOpacity onPress={() => editDefaultRoutine()}>
-    //         <Routine text={"Morning Routine"}></Routine>
-    //       </TouchableOpacity>
-
-    //       <TouchableOpacity onPress={() => editDefaultRoutine()}>
-    //         <Routine text={"Night Routine"}></Routine>
-    //       </TouchableOpacity>
-
-    //       {/* where new routines are added */}
-    //       {routineItems.map((item, index) => {
-    //         return (
-    //           <TouchableOpacity key={index} onPress={() => editRoutine(index)}>
-    //             <Routine text={item} />
-    //           </TouchableOpacity>
-    //         );
-    //       })}
-
-    //       <Routine text={"Photo Log"}></Routine>
-    //     </View>
-    //   </View>
-
-    //   {/* Add a new routine */}
-    //   <KeyboardAvoidingView
-    //     behavior={Platform.OS === "ios" ? "padding" : "height"}
-    //     style={styles.writeTaskWrapper}
-    //   >
-    //     <TextInput
-    //       style={styles.input}
-    //       placeholder={"add a new routine"}
-    //       value={routine}
-    //       onChangeText={(text) => setRoutine(text)}
-    //     />
-    //     <TouchableOpacity onPress={() => handleAddRoutine()}>
-    //       <View style={styles.addWrapper}>
-    //         <Text style={styles.addText}>+</Text>
-    //       </View>
-    //     </TouchableOpacity>
-    //   </KeyboardAvoidingView>
-    // </View>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -115,46 +108,27 @@ const styles = StyleSheet.create({
     top: 50,
     alignSelf: "center",
   },
-  taskWrapper: {
-    paddingTop: 200,
-    paddingHorizontal: 20,
+  content: {
+    flex: 1,
+    height: "70%",
+    top: 200,
   },
-  sectionTitle: {
-    fontSize: 40,
-    fontWeight: "bold",
+  itemContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 100,
+    borderRadius: 20,
+    borderColor: Colors.secondary,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    padding: 15,
+    backgroundColor: Colors.white,
+  },
+  icon: {
+    padding: 5,
+    fontSize: 32,
     color: Colors.primary,
   },
-  items: {
-    margin: 30,
-  },
-  writeTaskWrapper: {
-    position: "absolute",
-    bottom: 30,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-  },
-  input: {
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    width: 250,
-    backgroundColor: Colors.white,
-    borderRadius: 60,
-    borderWidth: 1,
-    borderColor: Colors.primary,
-  },
-  addWrapper: {
-    width: 60,
-    height: 60,
-    backgroundColor: Colors.white,
-    borderRadius: 60,
-    borderWidth: 1,
-    borderColor: Colors.primary,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  addText: {},
+  itemTitle: {},
 });
-
-export default TodayScreen2;

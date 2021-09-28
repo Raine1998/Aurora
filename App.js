@@ -6,17 +6,20 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 
 //screens
+import WelcomeScreen from "./app/screens/WelcomeScreen";
 import TodayScreen from "./app/screens/TodayScreen";
 import ShelfScreen from "./app/screens/ShelfScreen";
 import DiaryScreen from "./app/screens/DiaryScreen";
 import DiscoverScreen from "./app/screens/DiscoverScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
+import MorningRoutineScreen from "./app/screens/MorningRoutineScreen";
 
 //nav
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import TodayScreen2 from "./app/screens/TodayScreen2";
+import RoutineList from "./app/screens/RoutineList";
 
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -30,14 +33,30 @@ if (!firebase.apps.length) {
 export default function App() {
   return (
     <NavigationContainer>
-      <Tabs.Navigator style={styles.tab}>
-        <Tabs.Screen name="Today" component={TodayScreen} />
-        <Tabs.Screen name="Diary" component={DiaryScreen} />
-        <Tabs.Screen name="My Shelf" component={ShelfScreen} />
-        <Tabs.Screen name="Discover" component={DiscoverScreen} />
-        <Tabs.Screen name="My Profile" component={ProfileScreen} />
-      </Tabs.Navigator>
+      <Stack.Navigator>
+        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="Today2" component={TodayScreen2} />
+        <Stack.Screen
+          name="RoutineList"
+          component={RoutineList}
+          options={({ route }) => {
+            return { title: route.params.title };
+          }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
+
+    // <NavigationContainer>
+    //   <Tabs.Navigator style={styles.tab}>
+    //     <Tabs.Screen name="Welcome" component={WelcomeScreen} />
+    //     <Tabs.Screen name="Today" component={TodayScreen} />
+    //     <Tabs.Screen name="Diary" component={DiaryScreen} />
+    //     <Tabs.Screen name="My Shelf" component={ShelfScreen} />
+    //     <Tabs.Screen name="Discover" component={DiscoverScreen} />
+    //     <Tabs.Screen name="My Profile" component={ProfileScreen} />
+    //     <Tabs.Screen name="MorningRoutine" component={MorningRoutineScreen} />
+    //   </Tabs.Navigator>
+    // </NavigationContainer>
   );
 }
 
