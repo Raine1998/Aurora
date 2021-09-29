@@ -1,4 +1,4 @@
-//entry point of the program
+/**entry point of the program */
 
 import { StatusBar } from "expo-status-bar";
 import React from "react";
@@ -13,7 +13,6 @@ import ShelfScreen from "./app/screens/ShelfScreen";
 import DiaryScreen from "./app/screens/DiaryScreen";
 import DiscoverScreen from "./app/screens/DiscoverScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
-import MorningRoutineScreen from "./app/screens/MorningRoutineScreen";
 
 //nav imports
 import { NavigationContainer } from "@react-navigation/native";

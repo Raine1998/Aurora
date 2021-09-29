@@ -1,4 +1,4 @@
-//RoutineList is a screen that stores a list of RoutineStep components
+/** RoutineList is a screen that stores a list of RoutineStep components */
 
 import React, { useState, useLayoutEffect } from "react";
 import {
