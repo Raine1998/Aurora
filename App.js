@@ -1,3 +1,5 @@
+//entry point of the program
+
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -14,7 +16,7 @@ import DiscoverScreen from "./app/screens/DiscoverScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
 import MorningRoutineScreen from "./app/screens/MorningRoutineScreen";
 
-//nav
+//nav imports
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";

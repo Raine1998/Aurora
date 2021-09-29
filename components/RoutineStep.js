@@ -1,60 +1,94 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import Colors from "../app/config/Colors";
+import Checkbox from "./Checkbox";
 
-const RoutineStep = (props) => {
+export default ({ text, isChecked, onChecked, onChangeText }) => {
+  //
+  const [isEditMode, setEditMode] = useState(false);
+
   return (
-    <View style={styles.item}>
+    <View style={styles.container}>
       <View style={styles.itemLeft}>
-        <View style={styles.square}></View>
-        <Text styles={styles.itemText}>{props.text}</Text>
+        <Checkbox isChecked={isChecked} onChecked={onChecked} />
+        <TouchableOpacity
+          onPress={() => {
+            setEditMode(true);
+          }}
+        >
+          {isEditMode ? (
+            <TextInput
+              selectionColor={"transparent"}
+              autoFocus={true}
+              value={text}
+              onChangeText={onChangeText}
+              placeholder={"New step"}
+              onSubmitEditing={() => {}}
+              maxLength={30}
+              style={styles.input}
+              onBlur={() => {
+                setEditMode(false);
+              }}
+            />
+          ) : (
+            <Text style={styles.text}>{text}</Text>
+          )}
+        </TouchableOpacity>
       </View>
-      <View style={styles.trashButton}></View>
+      {/* delete */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  item: {
-    backgroundColor: Colors.white,
-    padding: 35,
-    borderRadius: 20,
+  container: {
+    flex: 1,
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: Colors.primary,
+    alignItems: "center",
+    padding: 10,
+    fontSize: 30,
   },
   itemLeft: {
+    //the box that encases each step
     flexDirection: "row",
+    flex: 1,
+
+    backgroundColor: Colors.white,
     alignItems: "center",
-    flexWrap: "wrap",
-  },
-  square: {
-    width: 24,
-    height: 24,
-    backgroundColor: Colors.white,
-    borderColor: Colors.primary,
+    height: 80,
+    borderRadius: 20,
+    borderColor: Colors.secondary,
     borderWidth: 2,
-    opacity: 0.4,
-    borderRadius: 5,
-    marginRight: 15,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    padding: 15,
   },
-  trashButton: {
-    width: 30,
-    height: 30,
-    backgroundColor: Colors.white,
-    borderColor: Colors.primary,
-    borderWidth: 2,
-    opacity: 0.4,
-    borderRadius: 10,
-    marginRight: 15,
+
+  icon: {
+    padding: 5,
+    fontSize: 16,
+    color: Colors.primary,
   },
-  itemText: {
-    maxWidth: "80%",
+  input: {
+    color: Colors.black,
+    borderBottomColor: Colors.primary,
+    borderBottomWidth: 0.5,
+    padding: 3,
+    height: 25,
+    fontSize: 30,
+  },
+  text: {
+    //the routine step name
+    color: Colors.primary,
+    padding: 3,
+    fontSize: 30,
+    fontWeight: "bold",
   },
 });
-
-export default RoutineStep;

@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     borderColor: Colors.secondary,
+    backgroundColor: Colors.white,
     width: "100%",
     height: 70,
   },
@@ -77,6 +78,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     borderColor: Colors.secondary,
+    backgroundColor: Colors.white,
+
     width: "100%",
     height: 70,
   },
@@ -84,6 +87,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     borderColor: Colors.secondary,
+    backgroundColor: Colors.white,
+
     width: "100%",
     height: 70,
   },

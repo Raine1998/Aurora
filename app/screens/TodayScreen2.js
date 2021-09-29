@@ -1,7 +1,7 @@
 // The main screen of the application. It has a list of routines --it can be edited by the user
 // each routine is a RoutineButton component
-//when pressed, it leads to a list of steps that are also  editable
-//each step is a component
+//when pressed, it leads to a RoutineList screen which is list of RoutineStep components
+// that are also editable
 
 import React, { useState, useLayoutEffect } from "react";
 import {
@@ -16,6 +16,7 @@ import {
 
 import Colors from "../config/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import { TextInput } from "react-native-gesture-handler";
 
 const RoutineButton = ({ title, navigation, onDelete }) => {
   return (
@@ -53,7 +54,7 @@ const RoutineButton = ({ title, navigation, onDelete }) => {
 
 const renderAddListIcon = (addItem) => {
   return (
-    <TouchableOpacity onPress={() => addItem({ title: "title" })}>
+    <TouchableOpacity onPress={() => addItem({ title: "New routine" })}>
       <Text style={styles.icon}>+</Text>
     </TouchableOpacity>
   );
@@ -85,7 +86,6 @@ export default ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require("../assets/appname.png")} />
-
       <View style={styles.content}>
         <FlatList
           data={routineList}
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 20,
     borderColor: Colors.secondary,
+    borderWidth: 2,
     marginHorizontal: 20,
     marginVertical: 10,
     padding: 15,
@@ -137,5 +138,10 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: Colors.primary,
   },
-  itemTitle: {},
+  itemTitle: {
+    //"the routine titles"
+    fontWeight: "bold",
+    fontSize: 25,
+    color: Colors.primary,
+  },
 });

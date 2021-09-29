@@ -1,3 +1,5 @@
+//RoutineList is a screen that stores a list of RoutineStep components
+
 import React, { useState, useLayoutEffect } from "react";
 import {
   View,
@@ -9,11 +11,13 @@ import {
 } from "react-native";
 import Colors from "../config/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import RoutineStep from "../../components/RoutineStep";
 
+//the + button on the header
 const renderAddListIcon = (addItem) => {
   return (
     <TouchableOpacity
-      onPress={() => addItem({ text: "hello2", isChecked: false })}
+      onPress={() => addItem({ text: "New step", isChecked: false })}
     >
       <Text style={styles.icon}>+</Text>
     </TouchableOpacity>
@@ -22,7 +26,7 @@ const renderAddListIcon = (addItem) => {
 
 export default ({ navigation }) => {
   const [routineItems, setRoutineItems] = useState([
-    { text: "hello", isChecked: false },
+    { text: "Cleanser", isChecked: false },
   ]);
 
   const addItemToRoutineList = (item) => {
@@ -32,6 +36,11 @@ export default ({ navigation }) => {
 
   const removeItemFromRoutineList = (index) => {
     routineItems.splice(index, 1);
+    setRoutineItems([...routineItems]);
+  };
+
+  const updateItem = (index, item) => {
+    routineItems[index] = item;
     setRoutineItems([...routineItems]);
   };
 
@@ -48,7 +57,22 @@ export default ({ navigation }) => {
         data={routineItems}
         keyExtractor={(item, index) => index.toString()} // key
         renderItem={({ item: { text, isChecked }, index }) => {
-          return <Text>{text}</Text>;
+          return (
+            <RoutineStep
+              text={text}
+              isChecked={isChecked}
+              onChecked={() => {
+                const routineItem = routineItems[index];
+                routineItem.isChecked = !isChecked; //set the ischecked to the opposite so that when the checkbox is clicked, it toggles
+                updateItem(index, routineItem);
+              }}
+              onChangeText={(newText) => {
+                const routineItem = routineItems[index];
+                routineItem.text = newText;
+                updateItem(index, routineItem);
+              }}
+            />
+          );
         }}
       />
     </View>
