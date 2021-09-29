@@ -21,7 +21,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import TodayScreen2 from "./app/screens/TodayScreen2";
 import RoutineList from "./app/screens/RoutineList";
-import EditRoutineListScreen from "./app/screens/EditRoutineList";
+import EditRoutineListScreen from "./app/screens/EditRoutineListScreen";
 
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -49,7 +49,11 @@ export default function App() {
           name="EditRoutineList"
           component={EditRoutineListScreen}
           options={({ route }) => {
-            return { title: route.params.title };
+            return {
+              title: route.params.title
+                ? route.params.title
+                : "Create new list",
+            };
           }}
         />
       </Stack.Navigator>

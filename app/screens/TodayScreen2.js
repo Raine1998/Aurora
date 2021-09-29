@@ -56,9 +56,13 @@ const RoutineButton = ({ title, navigation, onDelete, onOptions }) => {
   );
 };
 
-const renderAddListIcon = (addItem) => {
+const renderAddListIcon = (navigation) => {
   return (
-    <TouchableOpacity onPress={() => addItem({ title: "New routine" })}>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate("EditRoutineList", {});
+      }}
+    >
       <Text style={styles.icon}>+</Text>
     </TouchableOpacity>
   );
@@ -83,7 +87,7 @@ export default ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => renderAddListIcon(addItemToRoutineList),
+      headerRight: () => renderAddListIcon(navigation),
     });
   });
 
