@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import Colors from "../app/config/Colors";
+import Colors from "../config/Colors";
 
 export default ({ isChecked, onChecked, ...props }) => {
   return (
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   checkSign: {
+    fontSize: 20,
     color: Colors.primary,
   },
 });

@@ -8,17 +8,16 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
 import Colors from "../config/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import RoutineStep from "../../components/RoutineStep";
+import RoutineStep from "../components/RoutineStep";
 
 //the + button on the header
 const renderAddListIcon = (addItem) => {
   return (
-    <TouchableOpacity
-      onPress={() => addItem({ text: "New step", isChecked: false })}
-    >
+    <TouchableOpacity onPress={() => addItem({ text: "", isChecked: false })}>
       <Text style={styles.icon}>+</Text>
     </TouchableOpacity>
   );
@@ -70,6 +69,20 @@ export default ({ navigation }) => {
                 const routineItem = routineItems[index];
                 routineItem.text = newText;
                 updateItem(index, routineItem);
+              }}
+              onDelete={() => {
+                //ask user for confirmation before delete
+                Alert.alert("Delete this step?", "", [
+                  {
+                    text: "Delete",
+                    onPress: () => removeItemFromRoutineList(index),
+                  },
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                ]);
               }}
             />
           );

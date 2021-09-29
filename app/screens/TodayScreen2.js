@@ -18,11 +18,11 @@ import Colors from "../config/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
 
-const RoutineButton = ({ title, navigation, onDelete }) => {
+const RoutineButton = ({ title, navigation, onDelete, onOptions }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("RoutineList", { title });
+        navigation.navigate("RoutineList", { title }); //go to RoutineList screen
       }}
       style={styles.itemContainer}
     >
@@ -30,11 +30,15 @@ const RoutineButton = ({ title, navigation, onDelete }) => {
         <Text style={styles.itemTitle}>{title}</Text>
       </View>
       <View style={{ flexDirection: "row" }}>
-        <TouchableOpacity onPress={() => {}}>
+        {/* Options button */}
+        <TouchableOpacity onPress={onOptions}>
           <Ionicons name="options-outline" size={27} color={Colors.primary} />
         </TouchableOpacity>
+
+        {/* Trash button */}
         <TouchableOpacity
           onPress={() =>
+            //ask user for confirmation before delete
             Alert.alert("Delete this routine?", "", [
               { text: "Delete", onPress: onDelete },
               {
@@ -95,6 +99,9 @@ export default ({ navigation }) => {
               <RoutineButton
                 title={title}
                 navigation={navigation}
+                onOptions={() => {
+                  navigation.navigate("EditRoutineList", { title });
+                }}
                 onDelete={() => removeItemFromRoutineList(index)}
               />
             );

@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from "react-native";
 import Colors from "../config/Colors";
-import RoutineStep from "../../components/RoutineStep";
+import RoutineStep from "../components/RoutineStep";
 
 function MorningRoutineScreen(props) {
   const [routine, setRoutine] = useState();

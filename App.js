@@ -9,7 +9,6 @@ import "firebase/firestore";
 
 //screens
 import WelcomeScreen from "./app/screens/WelcomeScreen";
-import TodayScreen from "./app/screens/TodayScreen";
 import ShelfScreen from "./app/screens/ShelfScreen";
 import DiaryScreen from "./app/screens/DiaryScreen";
 import DiscoverScreen from "./app/screens/DiscoverScreen";
@@ -22,6 +21,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import TodayScreen2 from "./app/screens/TodayScreen2";
 import RoutineList from "./app/screens/RoutineList";
+import EditRoutineListScreen from "./app/screens/EditRoutineList";
 
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -45,13 +45,20 @@ export default function App() {
             return { title: route.params.title };
           }}
         />
+        <Stack.Screen
+          name="EditRoutineList"
+          component={EditRoutineListScreen}
+          options={({ route }) => {
+            return { title: route.params.title };
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
 
     // <NavigationContainer>
     //   <Tabs.Navigator style={styles.tab}>
     //     <Tabs.Screen name="Welcome" component={WelcomeScreen} />
-    //     <Tabs.Screen name="Today" component={TodayScreen} />
+    //     <Tabs.Screen name="Today2" component={TodayScreen2} />
     //     <Tabs.Screen name="Diary" component={DiaryScreen} />
     //     <Tabs.Screen name="My Shelf" component={ShelfScreen} />
     //     <Tabs.Screen name="Discover" component={DiscoverScreen} />
