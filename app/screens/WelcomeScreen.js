@@ -40,7 +40,7 @@ function WelcomeScreen({ navigation }) {
         <View style={styles.guestButton}>
           <Button
             title="Continue without signing up"
-            onPress={() => navigation.navigate("Today2")}
+            onPress={() => navigation.navigate("Today")}
           />
         </View>
       </View>

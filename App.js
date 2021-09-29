@@ -19,7 +19,7 @@ import MorningRoutineScreen from "./app/screens/MorningRoutineScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import TodayScreen2 from "./app/screens/TodayScreen2";
+import TodayScreen from "./app/screens/TodayScreen";
 import RoutineList from "./app/screens/RoutineList";
 import EditRoutineListScreen from "./app/screens/EditRoutineListScreen";
 
@@ -37,7 +37,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Today2" component={TodayScreen2} />
+        <Stack.Screen name="Today" component={TodayScreen} />
         <Stack.Screen
           name="RoutineList"
           component={RoutineList}
@@ -50,6 +50,7 @@ export default function App() {
           component={EditRoutineListScreen}
           options={({ route }) => {
             return {
+              //if routine step doesn't exist yet,
               title: route.params.title
                 ? route.params.title
                 : "Create new list",
