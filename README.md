@@ -1,6 +1,6 @@
 # Aurora
 
-## Open up the application via the Expo Go application and by scanning the QR code at:
+# Open up the application via the Expo Go application and by scanning the QR code at:
 
     https://expo.dev/@raine1998/Aurora
 

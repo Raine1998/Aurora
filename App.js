@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 //firebase imports
 import ApiKey from "./app/config/ApiKeys";
@@ -41,7 +42,7 @@ const AuthScreens = () => {
 const TodayStackScreens = () => {
   return (
     <TodayStack.Navigator>
-      <TodayStack.Screen name="Today" component={TodayScreen} />
+      <TodayStack.Screen name="TodayStack" component={TodayScreen} />
       <TodayStack.Screen name="Settings" component={Settings} />
       <TodayStack.Screen
         name="RoutineList"
@@ -68,11 +69,51 @@ const TodayStackScreens = () => {
 const TabScreens = () => {
   return (
     <Tabs.Navigator style={styles.tab}>
-      <Tabs.Screen name="TodayStack" component={TodayStackScreens} />
-      <Tabs.Screen name="Diary" component={DiaryScreen} />
-      <Tabs.Screen name="My Shelf" component={ShelfScreen} />
-      <Tabs.Screen name="Discover" component={DiscoverScreen} />
-      <Tabs.Screen name="My Profile" component={ProfileScreen} />
+      <Tabs.Screen
+        name="Today"
+        component={TodayStackScreens}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calendar" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Diary"
+        component={DiaryScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="book" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="My Shelf"
+        component={ShelfScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="heart" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Discover"
+        component={DiscoverScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="earth" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="My Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-outline" color={color} size={size} />
+          ),
+        }}
+      />
     </Tabs.Navigator>
   );
 };
