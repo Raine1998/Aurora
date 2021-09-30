@@ -23,16 +23,16 @@ import { auth, firestore } from "firebase";
 //the + button on the header
 const renderAddListIcon = (addItem) => {
   return (
-    <TouchableOpacity onPress={() => addItem({ text: "", isChecked: false })}>
+    <TouchableOpacity onPress={() => addItem()}>
       <Text style={styles.icon}>+</Text>
     </TouchableOpacity>
   );
 };
 
 export default ({ navigation, route }) => {
-  const [routineItems, setRoutineItems] = useState([
-    // { text: "Cleanser", isChecked: false },
-  ]);
+  let [routineItems, setRoutineItems] = useState([]); // { text: "Cleanser", isChecked: false },
+
+  const [newRoutineItem, setNewRoutineItem] = useState();
 
   const routineItemRef = firestore()
     .collection("users")
@@ -63,18 +63,12 @@ export default ({ navigation, route }) => {
     );
   }, []);
 
-  const addItemToRoutineList = (item) => {
-    routineItems.push(item);
-    setRoutineItems([...routineItems]);
+  const addItemToRoutineList = () => {
+    setNewRoutineItem({ text: "", isChecked: false, new: true });
   };
 
   const removeItemFromRoutineList = (index) => {
     routineItems.splice(index, 1);
-    setRoutineItems([...routineItems]);
-  };
-
-  const updateItem = (index, item) => {
-    routineItems[index] = item;
     setRoutineItems([...routineItems]);
   };
 
@@ -85,32 +79,51 @@ export default ({ navigation, route }) => {
     });
   });
 
+  if (newRoutineItem) {
+    routineItems = [newRoutineItem, ...routineItems];
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
         data={routineItems}
         keyExtractor={(item, index) => index.toString()} // key
-        renderItem={({ item: { text, isChecked }, index }) => {
+        renderItem={({ item: { text, isChecked, id, ...params }, index }) => {
           return (
             <RoutineStep
+              {...params}
               text={text}
               isChecked={isChecked}
               onChecked={() => {
-                const routineItem = routineItems[index];
-                routineItem.isChecked = !isChecked; //set the ischecked to the opposite so that when the checkbox is clicked, it toggles
-                updateItem(index, routineItem);
+                let data = { text, isChecked: !isChecked };
+                if (id) {
+                  data.id = id; //idl?
+                }
+                addDoc(routineItemRef, data);
               }}
               onChangeText={(newText) => {
-                const routineItem = routineItems[index];
-                routineItem.text = newText;
-                updateItem(index, routineItem);
+                if (params.new) {
+                  setNewRoutineItem({
+                    text: newText,
+                    isChecked,
+                    new: params.new,
+                  });
+                } else {
+                  routineItems[index].text = newText;
+                  setRoutineItems([...routineItems]);
+                }
               }}
               onDelete={() => {
                 //ask user for confirmation before delete
                 Alert.alert("Delete this step?", "", [
                   {
                     text: "Delete",
-                    onPress: () => removeItemFromRoutineList(index),
+                    onPress: () => {
+                      params.new
+                        ? setNewRoutineItem(null)
+                        : removeItemFromRoutineList(index);
+                      id && removeDoc(routineItemRef, id); //modifies the firebase
+                    },
                   },
                   {
                     text: "Cancel",
@@ -118,6 +131,23 @@ export default ({ navigation, route }) => {
                     style: "cancel",
                   },
                 ]);
+              }}
+              //when user leaves the text inpu, save the text value
+              onBlur={() => {
+                //ensure that text has at least one character in it
+                if (text.length > 1) {
+                  let data = { text, isChecked };
+                  if (id) {
+                    data.id = id;
+                  }
+                  addDoc(routineItemRef, data); //adding and updating items
+                  //if item is new
+                  params.new && setNewRoutineItem(null);
+                } else {
+                  params.new
+                    ? setNewRoutineItem(null)
+                    : removeItemFromRoutineList(index);
+                }
               }}
             />
           );

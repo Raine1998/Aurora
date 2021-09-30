@@ -11,14 +11,14 @@ import {
 import Colors from "../config/Colors";
 import Checkbox from "./Checkbox";
 
-export default ({ isChecked, onChangeText, text }) => {
-  const [isEditMode, setEditMode] = useState(false);
+export default ({ isChecked, onChangeText, text, ...props }) => {
+  const [isEditMode, setEditMode] = useState(props.new);
 
   return (
     <TouchableOpacity
       style={styles.editStepButton}
       onPress={() => {
-        setEditMode(true);
+        !isChecked && setEditMode(true);
       }}
     >
       {isEditMode ? (
@@ -32,6 +32,7 @@ export default ({ isChecked, onChangeText, text }) => {
           maxLength={30}
           style={styles.input}
           onBlur={() => {
+            props.onBlur && props.onBlur();
             setEditMode(false);
           }}
         />

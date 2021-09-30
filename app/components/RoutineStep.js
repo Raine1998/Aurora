@@ -10,38 +10,14 @@ import Colors from "../config/Colors";
 import Checkbox from "./Checkbox";
 import EditableText from "./EditableText";
 
-// const EditableText = ({ isChecked, onChangeText, text }) => {
-//   const [isEditMode, setEditMode] = useState(false);
-
-//   return (
-//     <TouchableOpacity
-//       style={styles.editStepButton}
-//       onPress={() => {
-//         setEditMode(true);
-//       }}
-//     >
-//       {isEditMode ? (
-//         <TextInput
-//           selectionColor={"transparent"}
-//           autoFocus={true}
-//           value={text}
-//           onChangeText={onChangeText}
-//           placeholder={"New step"}
-//           onSubmitEditing={() => {}}
-//           maxLength={30}
-//           style={styles.input}
-//           onBlur={() => {
-//             setEditMode(false);
-//           }}
-//         />
-//       ) : (
-//         <Text style={styles.text}>{text}</Text>
-//       )}
-//     </TouchableOpacity>
-//   );
-// };
-
-export default ({ text, isChecked, onChecked, onChangeText, onDelete }) => {
+export default ({
+  text,
+  isChecked,
+  onChecked,
+  onChangeText,
+  onDelete,
+  ...props
+}) => {
   //
   const [isEditMode, setEditMode] = useState(false);
 
@@ -54,6 +30,7 @@ export default ({ text, isChecked, onChecked, onChangeText, onDelete }) => {
           text={text}
           onChangeText={onChangeText}
           isChecked={isChecked}
+          {...props}
         />
       </View>
       {/* delete button */}
