@@ -18,7 +18,6 @@ import {
 
 import Colors from "../config/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import { TextInput } from "react-native-gesture-handler";
 
 const RoutineButton = ({ title, navigation, onDelete, onOptions }) => {
   return (
@@ -58,11 +57,13 @@ const RoutineButton = ({ title, navigation, onDelete, onOptions }) => {
   );
 };
 
-const renderAddListIcon = (navigation) => {
+const renderAddListIcon = (navigation, addItemToRoutineList) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("EditRoutineList", {});
+        navigation.navigate("EditRoutineList", {
+          saveChanges: addItemToRoutineList,
+        });
       }}
     >
       <Text style={styles.icon}>+</Text>
@@ -87,9 +88,14 @@ export default ({ navigation }) => {
     setRoutineList([...routineList]);
   };
 
+  const updateRoutineList = (index, item) => {
+    routineList[index] = item;
+    setRoutineList([...routineList]);
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => renderAddListIcon(navigation),
+      headerRight: () => renderAddListIcon(navigation, addItemToRoutineList),
     });
   });
 
@@ -106,7 +112,10 @@ export default ({ navigation }) => {
                 title={title}
                 navigation={navigation}
                 onOptions={() => {
-                  navigation.navigate("EditRoutineList", { title });
+                  navigation.navigate("EditRoutineList", {
+                    title,
+                    saveChanges: (item) => updateRoutineList(index, item),
+                  });
                 }}
                 onDelete={() => removeItemFromRoutineList(index)}
               />

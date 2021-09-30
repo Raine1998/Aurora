@@ -13,21 +13,39 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  LogBox,
 } from "react-native";
 import { color } from "react-native-reanimated";
 import Colors from "../config/Colors";
 
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+]);
 export default ({ navigation, route }) => {
   const [title, setTitle] = useState(route.params.title || " ");
+
+  const [isValid, setValid] = useState(true); //for checking if routine name is empty
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.text}>List Name</Text>
+        <View style={styles.invalidName}>
+          <Text style={styles.text}>Routine Name</Text>
+          {/* ensure that routine name is not empty */}
+          {!isValid && (
+            <Text style={styles.errorMessage}>
+              *Routine name cannot be empty
+            </Text>
+          )}
+        </View>
+
         <TextInput
           selectionColor={"transparent"}
           autoFocus={true}
           value={title}
-          onChangeText={setTitle}
+          onChangeText={(text) => {
+            setTitle(text);
+            setValid(true);
+          }}
           placeholder={"New routine name"}
           maxLength={30}
           style={styles.input}
@@ -40,6 +58,8 @@ export default ({ navigation, route }) => {
             route.params.saveChanges({ title });
             navigation.dispatch(CommonActions.goBack()); //takes user back to the previous screen -- which is the TodayScreen
           } else {
+            //if routine title is empty
+            setValid(false);
           }
         }}
       >
@@ -81,5 +101,13 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontSize: 25,
     fontWeight: "bold",
+  },
+  invalidName: {
+    flexDirection: "row",
+  },
+  errorMessage: {
+    color: Colors.red,
+    fontSize: 15,
+    marginLeft: 4,
   },
 });
