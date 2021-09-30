@@ -1,15 +1,28 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableHighlight,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "../config/Colors";
 
 function DiaryScreen(props) {
   return (
-    <View style={styles.container}>
-      <View style={styles.calendarBar}></View>
-      <Text>Diary Screen</Text>
-
-      <View style={styles.content}></View>
-    </View>
+    <SafeAreaView style={styles.container}>
+      {/* clickable images */}
+      <TouchableHighlight
+        underlayColor="pink"
+        onPress={() => console.log("image tapped.")}
+      >
+        <Image
+          style={{ width: 400, height: "103%" }}
+          source={require("../ScreenImages/DiaryScreen.png")}
+        />
+      </TouchableHighlight>
+    </SafeAreaView>
   );
 }
 
@@ -18,16 +31,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.bg,
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "center",
   },
-  calendarBar: {
-    width: "100%",
-    height: "80%",
-    backgroundColor: Colors.secondary,
-  },
+
   content: {
-    width: "90%",
-    height: "80%",
     backgroundColor: Colors.white,
   },
 });

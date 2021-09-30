@@ -13,7 +13,7 @@ import "firebase/firestore";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import TodayScreen from "./app/screens/TodayScreen";
 import RoutineList from "./app/screens/RoutineList";
-import EditRoutineListScreen from "./app/screens/EditRoutineListScreen";
+import EditRoutineListScreen from "./app/screens/EditRoutineNameScreen";
 import Settings from "./app/screens/Settings";
 
 import ShelfScreen from "./app/screens/ShelfScreen";

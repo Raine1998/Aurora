@@ -27,6 +27,7 @@ import {
 } from "../services/Collections";
 import { auth, firestore } from "firebase";
 
+//component
 const RoutineButton = ({ title, navigation, onDelete, onOptions, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.itemContainer}>
