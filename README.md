@@ -14,7 +14,7 @@
 
 # Install dependencies
 
-    npm install
+    npm i
 
 # Start
 
