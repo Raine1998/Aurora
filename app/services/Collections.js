@@ -18,6 +18,7 @@ export const onSnapshot = (ref, callback, options) => {
   });
 };
 
+//writes new data to the database
 export const addDoc = (ref, { id, ...data }) => {
   const doc = id ? ref.doc(id) : ref.doc();
   doc.set(data).then(() => {
@@ -25,6 +26,7 @@ export const addDoc = (ref, { id, ...data }) => {
   });
 };
 
+//updates existing data in the database
 export const updateDoc = (ref, id, data) => {
   ref
     .doc(id)
@@ -34,6 +36,7 @@ export const updateDoc = (ref, id, data) => {
     });
 };
 
+//deletes data from the database
 export const removeDoc = (ref, id) => {
   ref
     .doc(id)
