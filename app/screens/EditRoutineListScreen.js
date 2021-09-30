@@ -7,20 +7,14 @@ this is because pressing the routine opens up the routine steps screen (RoutineL
 
 import { CommonActions } from "@react-navigation/routers";
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  LogBox,
-} from "react-native";
-import { color } from "react-native-reanimated";
+import { View, StyleSheet, Text, TextInput, LogBox } from "react-native";
 import Colors from "../config/Colors";
+import Button from "../components/Button";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
 ]);
+
 export default ({ navigation, route }) => {
   const [title, setTitle] = useState(route.params.title || " ");
 
@@ -51,8 +45,9 @@ export default ({ navigation, route }) => {
           style={styles.input}
         />
       </View>
-      <TouchableOpacity
-        style={styles.saveButton}
+
+      <Button
+        text="Save"
         onPress={() => {
           if (title.length > 1) {
             route.params.saveChanges({ title });
@@ -62,9 +57,7 @@ export default ({ navigation, route }) => {
             setValid(false);
           }
         }}
-      >
-        <Text style={styles.saveButtonLabel}>Save</Text>
-      </TouchableOpacity>
+      />
     </View>
   );
 };

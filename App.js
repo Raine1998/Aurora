@@ -1,9 +1,10 @@
 /**entry point of the program */
 
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import ApiKey from "./app/config/ApiKeys";
+// import * as firebase from "firebase";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
@@ -24,7 +25,41 @@ import EditRoutineListScreen from "./app/screens/EditRoutineListScreen";
 
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const AuthStack = createStackNavigator();
 
+const AuthScreens = () => {
+  return (
+    <AuthStack.Navigator>
+      <AuthStack.Screen name="Welcome" component={WelcomeScreen} />
+    </AuthStack.Navigator>
+  );
+};
+
+const Screens = () => {
+  return (
+    <Stack.Navigator>
+      {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
+      <Stack.Screen name="Today" component={TodayScreen} />
+      <Stack.Screen
+        name="RoutineList"
+        component={RoutineList}
+        options={({ route }) => {
+          return { title: route.params.title };
+        }}
+      />
+      <Stack.Screen
+        name="EditRoutineList"
+        component={EditRoutineListScreen}
+        options={({ route }) => {
+          return {
+            //if routine step doesn't exist yet,
+            title: route.params.title ? route.params.title : "Create new list",
+          };
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 if (!firebase.apps.length) {
   firebase.initializeApp(ApiKey.FirebaseConfig);
 } else {
@@ -32,31 +67,10 @@ if (!firebase.apps.length) {
 }
 
 export default function App() {
+  const [isAuthenticated, setAuthenticated] = useState(false); //is logged in
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Today" component={TodayScreen} />
-        <Stack.Screen
-          name="RoutineList"
-          component={RoutineList}
-          options={({ route }) => {
-            return { title: route.params.title };
-          }}
-        />
-        <Stack.Screen
-          name="EditRoutineList"
-          component={EditRoutineListScreen}
-          options={({ route }) => {
-            return {
-              //if routine step doesn't exist yet,
-              title: route.params.title
-                ? route.params.title
-                : "Create new list",
-            };
-          }}
-        />
-      </Stack.Navigator>
+      {isAuthenticated ? <Screens /> : <AuthScreens />}
     </NavigationContainer>
 
     // <NavigationContainer>

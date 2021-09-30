@@ -5,13 +5,11 @@ import {
   View,
   StyleSheet,
   Text,
-  Image,
   TouchableOpacity,
   FlatList,
   Alert,
 } from "react-native";
 import Colors from "../config/Colors";
-import { Ionicons } from "@expo/vector-icons";
 import RoutineStep from "../components/RoutineStep";
 
 //the + button on the header
