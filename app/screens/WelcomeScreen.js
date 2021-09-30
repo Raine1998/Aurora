@@ -8,6 +8,7 @@ import AccountInput from "../components/AccountInput";
 import validator from "validator";
 import { auth, firestore } from "firebase";
 
+//validate email and password
 const validateFields = (email, password) => {
   const isValid = {
     email: validator.isEmail(email),

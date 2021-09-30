@@ -14,7 +14,7 @@ export default () => {
       <Button
         text="Log out"
         onPress={() => {
-          auth().signOut();
+          auth().signOut(); //tell the app no one is signed in
         }}
       />
     </View>

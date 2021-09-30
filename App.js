@@ -31,6 +31,7 @@ const Tabs = createBottomTabNavigator(); //the bottom navs
 const TodayStack = createStackNavigator(); //Today screen navs
 const AuthStack = createStackNavigator(); //the login
 
+//nav stack before authentication
 const AuthScreens = () => {
   return (
     <AuthStack.Navigator>
@@ -39,10 +40,12 @@ const AuthScreens = () => {
   );
 };
 
+// the nav stack for the today screen
 const TodayStackScreens = () => {
   return (
     <TodayStack.Navigator>
-      <TodayStack.Screen name="TodayStack" component={TodayScreen} />
+      {/* also today screen so i left the name blank */}
+      <TodayStack.Screen name=" " component={TodayScreen} />
       <TodayStack.Screen name="Settings" component={Settings} />
       <TodayStack.Screen
         name="RoutineList"
@@ -65,7 +68,7 @@ const TodayStackScreens = () => {
   );
 };
 
-//shows if authenticated
+//nav stack after authentication
 const TabScreens = () => {
   return (
     <Tabs.Navigator style={styles.tab}>
@@ -121,7 +124,7 @@ const TabScreens = () => {
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); //is logged in
 
-  //run
+  //checks if user is authenticated
   useEffect(() => {
     //if there is a current user
     if (firebase.auth().currentUser) {
