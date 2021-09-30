@@ -1,12 +1,27 @@
+/**Login screen */
+
 import React, { useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import Colors from "../config/Colors";
 import Button from "../components/Button";
 import AccountInput from "../components/AccountInput";
+import validator from "validator";
 
 export default () => {
-  const [isCreateMode, setCreateMode] = useState(true); //is user creating new account ; if false, user is logging in
+  //is user creating new account ; if false, user is logging in
+  const [isCreateMode, setCreateMode] = useState(false);
+
+  //states for input fields
   const [emailField, setEmailField] = useState({ text: "", errorMessage: "" });
+  const [passwordField, setPasswordField] = useState({
+    text: "",
+    errorMessage: "",
+  });
+  const [passwordConfirmField, setPasswordConfirmField] = useState({
+    text: "",
+    errorMessage: "",
+  });
+
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require("../assets/appname.png")} />
@@ -20,15 +35,49 @@ export default () => {
           }}
           errorMessage={emailField.errorMessage}
           labelStyle={styles.label}
-          autoCompleteType="email" //autocomplete for email
         />
-        {/* Password input */}
 
-        {/* password re-entry input */}
-        {/*  Login toggle*/}
-        {/* login /create account button */}
+        {/* Password input */}
+        <AccountInput
+          label="Password"
+          text={passwordField.text}
+          onChangeText={(text) => {
+            setPasswordField({ text });
+          }}
+          secureTextEntry={true} //ensure the password is hidden
+          errorMessage={passwordField.errorMessage}
+          labelStyle={styles.label}
+        />
+
+        {/* password re-entry input --only shows when creating account*/}
+        {isCreateMode && (
+          <AccountInput
+            label="Confirm password"
+            text={passwordConfirmField.text}
+            onChangeText={(text) => {
+              setPasswordConfirmField({ text });
+            }}
+            secureTextEntry={true} //ensure the password is hidden
+            errorMessage={passwordConfirmField.errorMessage}
+            labelStyle={styles.label}
+          />
+        )}
+
+        {/*  Login toggle - toggles between login and create account*/}
+        <TouchableOpacity
+          onPress={() => {
+            setCreateMode(!isCreateMode);
+          }}
+        >
+          <Text style={styles.toggleText}>
+            {isCreateMode
+              ? "Already have an account?"
+              : "Don't have an account?"}
+          </Text>
+        </TouchableOpacity>
       </View>
 
+      {/* login /create account button */}
       <Button
         onPress={() => {}}
         buttonStyle={styles.button}
@@ -62,10 +111,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     width: "80%",
     height: 70,
+    alignSelf: "center",
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
     color: Colors.primary,
+  },
+  toggleText: {
+    alignSelf: "center",
+    color: Colors.primary,
+    fontSize: 16,
+    margin: 2,
   },
 });
