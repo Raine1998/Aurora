@@ -7,6 +7,26 @@ import Button from "../components/Button";
 import AccountInput from "../components/AccountInput";
 import validator from "validator";
 
+const validateFields = (email, password) => {
+  const isValid = {
+    email: validator.isEmail(email),
+    //ensure that the password is strong with these requirements
+    password: validator.isStrongPassword(password, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    }),
+  };
+
+  return isValid;
+};
+
+const CreateAccount = (email, password) => {};
+
+const Login = (email, password) => {};
+
 export default () => {
   //is user creating new account ; if false, user is logging in
   const [isCreateMode, setCreateMode] = useState(false);
@@ -79,7 +99,38 @@ export default () => {
 
       {/* login /create account button */}
       <Button
-        onPress={() => {}}
+        onPress={() => {
+          const isValid = validateFields(emailField.text, passwordField.text);
+          let isAllValid = true;
+
+          //invalid email
+          if (!isValid.email) {
+            emailField.errorMessage = "Please enter a valid email";
+            setEmailField({ ...emailField }); //re-renders the email text
+            isAllValid = false;
+          }
+          //invalid password
+          if (!isValid.password) {
+            passwordField.errorMessage =
+              "Password must be at least 8 letters long with a lowercase, uppercase, number and symbol";
+            setPasswordField({ ...passwordField }); //re-renders the email text
+            isAllValid = false;
+          }
+
+          //if password and confirm password dont match
+          if (isCreateMode && passwordConfirmField.text != passwordField.text) {
+            passwordConfirmField.errorMessage = "Passwords do not match";
+            setPasswordConfirmField({ ...passwordConfirmField });
+            isAllValid = false;
+          }
+
+          //if all fields are valid
+          if (isAllValid) {
+            isCreateMode
+              ? CreateAccount(emailField.text, passwordField.text)
+              : Login(emailField.text, passwordField.text);
+          }
+        }}
         buttonStyle={styles.button}
         text={isCreateMode ? "Create Account" : "Login"}
       />
