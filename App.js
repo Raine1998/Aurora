@@ -1,14 +1,15 @@
 /**entry point of the program */
 
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
+
+//firebase imports
 import ApiKey from "./app/config/ApiKeys";
-// import * as firebase from "firebase";
+//import * as fb from "firebase";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
-//screens
+//screen imports
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import ShelfScreen from "./app/screens/ShelfScreen";
 import DiaryScreen from "./app/screens/DiaryScreen";
@@ -22,6 +23,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import TodayScreen from "./app/screens/TodayScreen";
 import RoutineList from "./app/screens/RoutineList";
 import EditRoutineListScreen from "./app/screens/EditRoutineListScreen";
+import Settings from "./app/screens/Settings";
 
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -38,8 +40,8 @@ const AuthScreens = () => {
 const Screens = () => {
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
       <Stack.Screen name="Today" component={TodayScreen} />
+      <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen
         name="RoutineList"
         component={RoutineList}
@@ -60,14 +62,29 @@ const Screens = () => {
     </Stack.Navigator>
   );
 };
-if (!firebase.apps.length) {
-  firebase.initializeApp(ApiKey.FirebaseConfig);
-} else {
-  firebase.app(); // if already initialized, use that one
-}
 
 export default function App() {
-  const [isAuthenticated, setAuthenticated] = useState(false); //is logged in
+  const [isAuthenticated, setIsAuthenticated] = useState(false); //is logged in
+
+  //run
+  useEffect(() => {
+    //if there is a current user
+    if (firebase.auth().currentUser) {
+      setIsAuthenticated(true);
+    }
+    //if there is a change in the authentication state in the firebase
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log("Checking auth state...");
+      if (user) {
+        //there is a user
+        setIsAuthenticated(true);
+      } else {
+        //no user
+        setIsAuthenticated(false);
+      }
+    });
+  }, []);
+
   return (
     <NavigationContainer>
       {isAuthenticated ? <Screens /> : <AuthScreens />}
@@ -96,3 +113,10 @@ const styles = StyleSheet.create({
   },
   tab: {},
 });
+
+// Initialize Firebase
+if (!firebase.apps.length) {
+  const app = firebase.initializeApp(ApiKey.FirebaseConfig);
+} else {
+  firebase.app(); // if already initialized, use that one
+}

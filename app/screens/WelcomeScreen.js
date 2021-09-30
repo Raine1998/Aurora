@@ -6,6 +6,7 @@ import Colors from "../config/Colors";
 import Button from "../components/Button";
 import AccountInput from "../components/AccountInput";
 import validator from "validator";
+import { auth, firestore } from "firebase";
 
 const validateFields = (email, password) => {
   const isValid = {
@@ -23,9 +24,22 @@ const validateFields = (email, password) => {
   return isValid;
 };
 
-const CreateAccount = (email, password) => {};
+const CreateAccount = (email, password) => {
+  auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(({ user }) => {
+      console.log("Creating user...");
+      firestore().collection("users").doc(user.uid).set({}); //create new user
+    });
+};
 
-const Login = (email, password) => {};
+const Login = (email, password) => {
+  auth()
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      console.log("logged in");
+    });
+};
 
 export default () => {
   //is user creating new account ; if false, user is logging in

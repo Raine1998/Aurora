@@ -5,7 +5,7 @@ when pressed, it leads to a RoutineList screen which is list of RoutineStep comp
 that are also editable
  */
 
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -18,15 +18,18 @@ import {
 
 import Colors from "../config/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import {
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  removeDoc,
+} from "../services/Collections";
+import { auth, firestore } from "firebase";
 
-const RoutineButton = ({ title, navigation, onDelete, onOptions }) => {
+const RoutineButton = ({ title, navigation, onDelete, onOptions, onPress }) => {
   return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("RoutineList", { title }); //go to RoutineList screen
-      }}
-      style={styles.itemContainer}
-    >
+    <TouchableOpacity onPress={onPress} style={styles.itemContainer}>
       <View>
         <Text style={styles.itemTitle}>{title}</Text>
       </View>
@@ -57,17 +60,31 @@ const RoutineButton = ({ title, navigation, onDelete, onOptions }) => {
   );
 };
 
+//header buttons
 const renderAddListIcon = (navigation, addItemToRoutineList) => {
   return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("EditRoutineList", {
-          saveChanges: addItemToRoutineList,
-        });
-      }}
-    >
-      <Text style={styles.icon}>+</Text>
-    </TouchableOpacity>
+    <View style={{ flexDirection: "row" }}>
+      {/* Logout button */}
+      <TouchableOpacity
+        style={styles.settingsIcon}
+        onPress={() => {
+          navigation.navigate("Settings");
+        }}
+      >
+        <Ionicons name="settings" size={27} color={Colors.primary} />
+      </TouchableOpacity>
+
+      {/* Add button */}
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("EditRoutineList", {
+            saveChanges: addItemToRoutineList,
+          });
+        }}
+      >
+        <Text style={styles.addIcon}>+</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -78,19 +95,48 @@ export default ({ navigation }) => {
     { title: "Weekend" },
   ]);
 
-  const addItemToRoutineList = (item) => {
-    routineList.push(item);
-    setRoutineList([...routineList]);
+  const routineListRef = firestore()
+    .collection("users")
+    .doc(auth().currentUser.uid)
+    .collection("lists");
+
+  //each time the db is updated, also update the routinelist
+  useEffect(() => {
+    onSnapshot(
+      routineListRef,
+      (newLists) => {
+        setRoutineList(newLists);
+      },
+      {
+        //sort the items in the lists
+        sort: (a, b) => {
+          if (a.index < b.index) {
+            return -1;
+          }
+          if (a.index > b.index) {
+            return 1;
+          } else {
+            return 0;
+          }
+        },
+      }
+    );
+  }, []);
+
+  const addItemToRoutineList = ({ title }) => {
+    const index =
+      routineList.length > 1
+        ? routineList[routineList.length - 1].index + 1
+        : 0;
+    addDoc(routineListRef, { title, index });
   };
 
-  const removeItemFromRoutineList = (index) => {
-    routineList.splice(index, 1);
-    setRoutineList([...routineList]);
+  const removeItemFromRoutineList = (id) => {
+    removeDoc(routineListRef, id);
   };
 
-  const updateRoutineList = (index, item) => {
-    routineList[index] = item;
-    setRoutineList([...routineList]);
+  const updateRoutineList = (id, item) => {
+    updateDoc(routineListRef, id, item);
   };
 
   useLayoutEffect(() => {
@@ -106,18 +152,22 @@ export default ({ navigation }) => {
         <FlatList
           data={routineList}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item: { title }, index }) => {
+          renderItem={({ item: { title, id, index } }) => {
             return (
               <RoutineButton
                 title={title}
                 navigation={navigation}
+                onPress={() => {
+                  navigation.navigate("RoutineList", { title, listId: id }); //go to RoutineList screen
+                }}
                 onOptions={() => {
                   navigation.navigate("EditRoutineList", {
                     title,
-                    saveChanges: (item) => updateRoutineList(index, item),
+                    saveChanges: (newItem) =>
+                      updateRoutineList(id, { index, ...newItem }),
                   });
                 }}
-                onDelete={() => removeItemFromRoutineList(index)}
+                onDelete={() => removeItemFromRoutineList(id)}
               />
             );
           }}
@@ -155,10 +205,15 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: Colors.white,
   },
-  icon: {
+  addIcon: {
     padding: 5,
     fontSize: 32,
     color: Colors.primary,
+    marginRight: 8,
+  },
+  settingsIcon: {
+    justifyContent: "center",
+    marginRight: 4,
   },
   itemTitle: {
     //"the routine titles"

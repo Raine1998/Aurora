@@ -1,6 +1,6 @@
 /** RoutineList is a screen that stores a list of RoutineStep components */
 
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -11,6 +11,14 @@ import {
 } from "react-native";
 import Colors from "../config/Colors";
 import RoutineStep from "../components/RoutineStep";
+import {
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  removeDoc,
+} from "../services/Collections";
+import { auth, firestore } from "firebase";
 
 //the + button on the header
 const renderAddListIcon = (addItem) => {
@@ -21,10 +29,39 @@ const renderAddListIcon = (addItem) => {
   );
 };
 
-export default ({ navigation }) => {
+export default ({ navigation, route }) => {
   const [routineItems, setRoutineItems] = useState([
-    { text: "Cleanser", isChecked: false },
+    // { text: "Cleanser", isChecked: false },
   ]);
+
+  const routineItemRef = firestore()
+    .collection("users")
+    .doc(auth().currentUser.uid)
+    .collection("lists")
+    .doc(route.params.listId)
+    .collection("routineItems");
+
+  useEffect(() => {
+    onSnapshot(
+      routineItemRef,
+      (newRoutineStep) => {
+        setRoutineItems(newRoutineStep);
+      },
+      {
+        //sort the items in the lists
+        sort: (a, b) => {
+          if (a.index < b.index) {
+            return -1;
+          }
+          if (a.index > b.index) {
+            return 1;
+          } else {
+            return 0;
+          }
+        },
+      }
+    );
+  }, []);
 
   const addItemToRoutineList = (item) => {
     routineItems.push(item);
