@@ -11,6 +11,11 @@ import "firebase/firestore";
 
 //screen imports
 import WelcomeScreen from "./app/screens/WelcomeScreen";
+import TodayScreen from "./app/screens/TodayScreen";
+import RoutineList from "./app/screens/RoutineList";
+import EditRoutineListScreen from "./app/screens/EditRoutineListScreen";
+import Settings from "./app/screens/Settings";
+
 import ShelfScreen from "./app/screens/ShelfScreen";
 import DiaryScreen from "./app/screens/DiaryScreen";
 import DiscoverScreen from "./app/screens/DiscoverScreen";
@@ -20,14 +25,10 @@ import ProfileScreen from "./app/screens/ProfileScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import TodayScreen from "./app/screens/TodayScreen";
-import RoutineList from "./app/screens/RoutineList";
-import EditRoutineListScreen from "./app/screens/EditRoutineListScreen";
-import Settings from "./app/screens/Settings";
 
-const Tabs = createBottomTabNavigator();
-const Stack = createStackNavigator();
-const AuthStack = createStackNavigator();
+const Tabs = createBottomTabNavigator(); //the bottom navs
+const TodayStack = createStackNavigator(); //Today screen navs
+const AuthStack = createStackNavigator(); //the login
 
 const AuthScreens = () => {
   return (
@@ -37,19 +38,20 @@ const AuthScreens = () => {
   );
 };
 
-const Screens = () => {
+//shows if authenticated
+const TodayStackScreens = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Today" component={TodayScreen} />
-      <Stack.Screen name="Settings" component={Settings} />
-      <Stack.Screen
+    <TodayStack.Navigator>
+      <TodayStack.Screen name="Today" component={TodayScreen} />
+      <TodayStack.Screen name="Settings" component={Settings} />
+      <TodayStack.Screen
         name="RoutineList"
         component={RoutineList}
         options={({ route }) => {
           return { title: route.params.title };
         }}
       />
-      <Stack.Screen
+      <TodayStack.Screen
         name="EditRoutineList"
         component={EditRoutineListScreen}
         options={({ route }) => {
@@ -59,7 +61,19 @@ const Screens = () => {
           };
         }}
       />
-    </Stack.Navigator>
+    </TodayStack.Navigator>
+  );
+};
+
+const TabScreens = () => {
+  return (
+    <Tabs.Navigator style={styles.tab}>
+      <Tabs.Screen name="TodayStack" component={TodayStackScreens} />
+      <Tabs.Screen name="Diary" component={DiaryScreen} />
+      <Tabs.Screen name="My Shelf" component={ShelfScreen} />
+      <Tabs.Screen name="Discover" component={DiscoverScreen} />
+      <Tabs.Screen name="My Profile" component={ProfileScreen} />
+    </Tabs.Navigator>
   );
 };
 
@@ -87,19 +101,19 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {isAuthenticated ? <Screens /> : <AuthScreens />}
+      {isAuthenticated ? <TabScreens /> : <AuthScreens />}
     </NavigationContainer>
 
     // <NavigationContainer>
-    //   <Tabs.Navigator style={styles.tab}>
-    //     <Tabs.Screen name="Welcome" component={WelcomeScreen} />
-    //     <Tabs.Screen name="Today2" component={TodayScreen2} />
-    //     <Tabs.Screen name="Diary" component={DiaryScreen} />
-    //     <Tabs.Screen name="My Shelf" component={ShelfScreen} />
-    //     <Tabs.Screen name="Discover" component={DiscoverScreen} />
-    //     <Tabs.Screen name="My Profile" component={ProfileScreen} />
-    //     <Tabs.Screen name="MorningRoutine" component={MorningRoutineScreen} />
-    //   </Tabs.Navigator>
+    // <Tabs.Navigator style={styles.tab}>
+    //   <Tabs.Screen name="Welcome" component={WelcomeScreen} />
+    //   <Tabs.Screen name="Today2" component={TodayScreen2} />
+    //   <Tabs.Screen name="Diary" component={DiaryScreen} />
+    //   <Tabs.Screen name="My Shelf" component={ShelfScreen} />
+    //   <Tabs.Screen name="Discover" component={DiscoverScreen} />
+    //   <Tabs.Screen name="My Profile" component={ProfileScreen} />
+    //   <Tabs.Screen name="MorningRoutine" component={MorningRoutineScreen} />
+    // </Tabs.Navigator>
     // </NavigationContainer>
   );
 }
