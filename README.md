@@ -2,11 +2,11 @@
 
 ## Open up the application via the Expo Go application and by scanning the QR code at:
 
-    url here
-    
+    https://expo.dev/@raine1998/Aurora
+
 # Or clone the git repository
 
-    git clone https://github.com/huangkun101230/325-a2.git
+    git clone https://github.com/Raine1998/Aurora.git
 
 ## Navigate into the folder
 

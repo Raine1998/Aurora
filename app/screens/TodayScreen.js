@@ -61,7 +61,7 @@ const RoutineButton = ({ title, navigation, onDelete, onOptions, onPress }) => {
   );
 };
 
-//header buttons
+//function for rendering header buttons
 const renderAddListIcon = (navigation, addItemToRoutineList) => {
   return (
     <View style={{ flexDirection: "row" }}>
