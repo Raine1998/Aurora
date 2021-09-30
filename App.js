@@ -38,7 +38,6 @@ const AuthScreens = () => {
   );
 };
 
-//shows if authenticated
 const TodayStackScreens = () => {
   return (
     <TodayStack.Navigator>
@@ -65,6 +64,7 @@ const TodayStackScreens = () => {
   );
 };
 
+//shows if authenticated
 const TabScreens = () => {
   return (
     <Tabs.Navigator style={styles.tab}>
@@ -103,18 +103,6 @@ export default function App() {
     <NavigationContainer>
       {isAuthenticated ? <TabScreens /> : <AuthScreens />}
     </NavigationContainer>
-
-    // <NavigationContainer>
-    // <Tabs.Navigator style={styles.tab}>
-    //   <Tabs.Screen name="Welcome" component={WelcomeScreen} />
-    //   <Tabs.Screen name="Today2" component={TodayScreen2} />
-    //   <Tabs.Screen name="Diary" component={DiaryScreen} />
-    //   <Tabs.Screen name="My Shelf" component={ShelfScreen} />
-    //   <Tabs.Screen name="Discover" component={DiscoverScreen} />
-    //   <Tabs.Screen name="My Profile" component={ProfileScreen} />
-    //   <Tabs.Screen name="MorningRoutine" component={MorningRoutineScreen} />
-    // </Tabs.Navigator>
-    // </NavigationContainer>
   );
 }
 

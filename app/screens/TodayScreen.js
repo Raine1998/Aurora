@@ -1,8 +1,8 @@
 /**
-The main screen of the application. It has a list of routines --it can be edited by the user
-each routine is a RoutineButton component
-when pressed, it leads to a RoutineList screen which is list of RoutineStep components
-that are also editable
+  The main screen of the application. It has a list of routines --it can be edited by the user
+  each routine is a RoutineButton component
+  when pressed, it leads to a RoutineList screen which is list of RoutineStep components
+  that are also editable
  */
 
 import React, { useState, useLayoutEffect, useEffect } from "react";
